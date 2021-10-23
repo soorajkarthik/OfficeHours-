@@ -12,7 +12,7 @@ class VideoRoom extends React.Component {
                 remote.push(<Video media={remoteMedia[i]} key={i} className="video"/>)
             }
         }
-        return (<div>
+        return (<div className="videoDiv">
             <Video media={local} className="video"/>
             {remote}
         </div>)

@@ -7,12 +7,14 @@ class ChatSection extends React.Component {
     render() {
         const {roomAddress} = this.props;
         return (<div class="chatDiv">
-                    <ChatList
-                        room={roomAddress}
-                        renderGroup={({chats, peer}) => {
-                            return <ChatBox key={chats[0].id} chats={chats} peer={peer}/>;
-                        }}
-                    />
+                    <div className="chatList">
+                        <ChatList
+                            room={roomAddress}
+                            renderGroup={({chats, peer}) => {
+                                return <ChatBox key={chats[0].id} chats={chats} peer={peer}/>;
+                            }}
+                        />
+                    </div>
                     <ChatInput
                         autoFocus
                         room={roomAddress}
@@ -24,10 +26,10 @@ class ChatSection extends React.Component {
                                     <span>Send</span>
                                 </button>
                             </div>)
-                        }
-                    }
+                        }}
+                        className="chatInput"
                     />
-                    <ChatComposers room={roomAddress} />
+                    <ChatComposers room={roomAddress} className="chatComp"/>
                 </div>)
     }
 }
