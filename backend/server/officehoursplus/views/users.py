@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
-from rest_framework import mixins, viewsets, serializers
+from rest_framework import mixins, serializers, viewsets
+
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -15,8 +16,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
         model = User
         fields = ['first_name', 'last_name', 'email', 'password']
 
+    
     def create(self, validated_data):
-        return User.objects.create_userd(
+        return User.objects.create_user(
             first_name = validated_data['first_name'],
             last_name = validated_data['last_name'],
             username = validated_data['email'],
@@ -28,13 +30,13 @@ class UserViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateM
     
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
     serializer_override_map = {
         'create': UserCreateSerializer
     }
 
     permission_classes = []
 
+    
     def get_serializer_class(self):
         if self.action in self.serializer_override_map:
             return self.serializer_override_map[self.action]
