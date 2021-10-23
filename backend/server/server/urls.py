@@ -2,16 +2,16 @@ from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
 from rest_framework import routers
-from officehoursplus.views import users
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from officehoursplus.views import users, tokens, classes
+from rest_framework_simplejwt.views import TokenRefreshView
 
 router = routers.DefaultRouter()
 router.register(r'users', users.UserViewSet)
+router.register(r'classes', classes.ClassViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', tokens.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('', include(router.urls))
+    path('api/', include(router.urls))
 ]
