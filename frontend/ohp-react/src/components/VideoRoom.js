@@ -3,11 +3,12 @@ import { Video } from '@andyet/simplewebrtc';
 
 class VideoRoom extends React.Component {
     render() {
-        let local = this.props.localMedia[1]
+        const {localMedia, remoteMedia} = this.props;
+        let local = localMedia[1]
         let remote = []
-        for (let i = 0; i < this.props.remoteMedia.length; i++) {
-            if (this.props.remoteMedia[i].kind === "video") {
-                remote.push(<Video media={this.props.remoteMedia[i]}/>)
+        for (let i = 0; i < remoteMedia.length; i++) {
+            if (remoteMedia[i].kind === "video") {
+                remote.push(<Video media={remoteMedia[i]} key={i}/>)
             }
         }
         return (<div>
