@@ -1,11 +1,12 @@
 import React from 'react';
 import ChatBox from './ChatBox';
+import '../styles/ChatSection.css'
 import { ChatInput, ChatGroup, ChatList, ChatComposers, ChatInputTextArea, Chat } from '@andyet/simplewebrtc';
 
 class ChatSection extends React.Component {
     render() {
         const {roomAddress} = this.props;
-        return (<div>
+        return (<div class="chatDiv">
                     <ChatList
                         room={roomAddress}
                         renderGroup={({chats, peer}) => {
@@ -17,7 +18,7 @@ class ChatSection extends React.Component {
                         room={roomAddress}
                         placeholder="Chat"
                         render={chatProps => {
-                            return (<div>
+                            return (<div class="chatInputArea">
                                 <ChatInputTextArea {...chatProps} />
                                 <button onClick={chatProps.sendMessage}>
                                     <span>Send</span>

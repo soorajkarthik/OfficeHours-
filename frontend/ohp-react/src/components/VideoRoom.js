@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/VideoRoom.css'
 import { Video } from '@andyet/simplewebrtc';
 
 class VideoRoom extends React.Component {
@@ -8,11 +9,11 @@ class VideoRoom extends React.Component {
         let remote = []
         for (let i = 0; i < remoteMedia.length; i++) {
             if (remoteMedia[i].kind === "video") {
-                remote.push(<Video media={remoteMedia[i]} key={i}/>)
+                remote.push(<Video media={remoteMedia[i]} key={i} className="video"/>)
             }
         }
         return (<div>
-            <Video media={local}/>
+            <Video media={local} className="video"/>
             {remote}
         </div>)
     }

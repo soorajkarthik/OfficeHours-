@@ -1,0 +1,15 @@
+.chatDiv {
+    background-color: lightgray;
+    border-left: 2px solid gray;
+    padding: 5px;
+    position: absolute;
+    right: 0%;
+    top:0%;
+    width:15%;
+    height:99%;
+}
+
+.chatInputArea {
+    position:absolute;
+    bottom:4%;
+}
