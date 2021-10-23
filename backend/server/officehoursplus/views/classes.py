@@ -1,55 +1,17 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User
-from django.db import models
 from django.db.models import fields
 from officehoursplus.models import (Classes, ClassUserStatus,
                                     UserMentorAssociations, UserMentorRequests)
-from officehoursplus.views.users import UserSerializer
-from rest_framework import mixins, serializers, viewsets
+from officehoursplus.serializers.classes import (ClassSerializer,
+                                                 ClassUserStatusSerializer,
+                                                 MentorRequestSerializer)
+from officehoursplus.serializers.classes import UserMentorAssociationSerializer
+from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import (IsAdminUser, IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-
-from datetime import datetime
-
-
-class ClassSerializer(serializers.ModelSerializer):
-
-    id = fields.Field(editable=False)
-
-    class Meta:
-        model = Classes
-        fields = ['id', 'name']
-
-
-class MentorRequestSerializer(serializers.ModelSerializer):
-
-    user_id = UserSerializer()
-    class_id = ClassSerializer()
-
-    class Meta:
-        model = UserMentorRequests
-        fields = ['id', 'user_id', 'class_id', 'request_time']
-
-
-class UserMentorAssociationSerializer(serializers.ModelSerializer):
-
-    user_id = UserSerializer()
-    class_id = ClassSerializer()
-
-    class Meta:
-        model = UserMentorAssociations
-        fields = ['id', 'user_id', 'class_id', 'creation_time']
-
-
-class ClassUserStatusSerializer(serializers.ModelSerializer):
-
-    user_id = UserSerializer()
-    class_id = ClassSerializer()
-
-    class Meta:
-        model = ClassUserStatus
-        fields = ['user_id', 'class_id', 'time_joined', 'time_left', 'status']
 
 
 class ClassViewSet(viewsets.ModelViewSet, mixins.CreateModelMixin, mixins.ListModelMixin):
@@ -113,8 +75,58 @@ class ClassViewSet(viewsets.ModelViewSet, mixins.CreateModelMixin, mixins.ListMo
     @action(detail=True, methods=['get'], url_path='users')
     def get_user_list(self, request, pk):
         queryset = ClassUserStatus.objects.filter(class_id=pk, time_left=None)
-        serializer = ClassUserStatusSerializer(list(queryset), many=True)
-        return Response(data=serializer.data, status=200)
+
+        mentors = queryset.raw(
+            """
+                SELECT 
+                    stat.id,
+                    stat.user_id_id,
+                    stat.class_id_id,
+                    stat.time_joined,
+                    stat.time_left,
+                    stat.status
+                FROM officehoursplus_classuserstatus AS stat
+                INNER JOIN officehoursplus_usermentorassociations AS ass
+                ON 
+                    stat.class_id_id = ass.class_id_id AND 
+                    stat.user_id_id = ass.user_id_id
+                WHERE 
+                    stat.time_left IS NULL AND 
+                    stat.class_id_id = {}
+            """.format(pk)
+        )
+
+        students = queryset.raw(
+            """
+                WITH stat as (
+                    SELECT 
+                        stat.id,
+                        stat.user_id_id,
+                        stat.class_id_id,
+                        stat.time_joined,
+                        stat.time_left,
+                        stat.status
+                    FROM officehoursplus_classuserstatus AS stat
+                    WHERE 
+                        stat.time_left IS NULL AND
+                        stat.class_id_id = {}
+                )
+                SELECT * FROM stat
+                WHERE NOT EXISTS (
+                    SELECT * 
+                    FROM officehoursplus_usermentorassociations AS ass
+                    WHERE 
+                        ass.class_id_id = {} AND
+                        ass.user_id_id = stat.user_id_id
+                )
+
+            """.format(pk, pk)
+        )
+
+        mentor_serializer = ClassUserStatusSerializer(instance=list(mentors), many=True)
+        student_serializer = ClassUserStatusSerializer(instance=list(students), many=True)
+
+        return Response(data={"mentors": mentor_serializer.data, "students": student_serializer.data}, status=200)
         
 
 class MentorRequestViewSet(viewsets.ModelViewSet):

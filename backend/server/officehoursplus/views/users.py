@@ -1,30 +1,13 @@
 from django.contrib.auth.models import User
-from rest_framework import mixins, serializers, viewsets
+from officehoursplus.models import UserMentorAssociations
+from officehoursplus.serializers.classes import ClassSerializer
+from officehoursplus.serializers.users import (UserCreateSerializer,
+                                               UserSerializer)
+from rest_framework import mixins, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.response import Response
 
-
-class UserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email']
-
-class UserCreateSerializer(serializers.ModelSerializer):
-
-    password = serializers.CharField(write_only=True)
-
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email', 'password']
-
-    
-    def create(self, validated_data):
-        return User.objects.create_user(
-            first_name = validated_data['first_name'],
-            last_name = validated_data['last_name'],
-            username = validated_data['email'],
-            email = validated_data['email'],
-            password = validated_data['password']
-        )
 
 class UserViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
     
@@ -34,7 +17,7 @@ class UserViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateM
         'create': UserCreateSerializer
     }
 
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     
     def get_serializer_class(self):
@@ -42,3 +25,20 @@ class UserViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateM
             return self.serializer_override_map[self.action]
 
         return super().get_serializer_class()
+
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny()]
+        elif self.action == 'list':
+            return [IsAdminUser()]
+        else:
+            return super().get_permissions()
+
+
+    @action(detail=True, methods=['get'], url_path='mentorship_list')
+    def get_mentorship_list(self, request, pk):
+        associations = UserMentorAssociations.objects.filter(user_id=pk)
+        serializer = ClassSerializer(instance=[association.class_id for association in list(associations)], many=True)
+        return Response(data=serializer.data, status=200)
+
