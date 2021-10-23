@@ -11,7 +11,7 @@ let url = `https://api.simplewebrtc.com/config/guest/${API_KEY}`;
 class VideoCall extends React.Component {
     render() {
         // roomName will probably be a prop later
-        let roomName = prompt("Enter a room name:");
+        const { roomName } = this.props;
         return (
             <webRTC.Provider configUrl={url}>
                 {/* Render based on the connection state */}
