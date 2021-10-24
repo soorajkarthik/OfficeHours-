@@ -1,0 +1,15 @@
+.chatMessageName {
+    font-weight:bold;
+    color:black;
+    margin: 2px;
+    overflow-wrap:anywhere;
+}
+
+.chatMessageContent {
+    position: relative;
+    color: darkgray;
+    margin: 1px;
+    margin-bottom:2px;
+    left: 5px;
+    overflow-wrap:anywhere;
+}

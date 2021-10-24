@@ -1,0 +1,30 @@
+.chatDiv {
+    background-color: lightgray;
+    border-left: 2px solid gray;
+    padding: 5px;
+    position: absolute;
+    right: 0%;
+    top: 0%;
+    width: 15%;
+    height: 99%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+}
+.chatInput {
+    min-height:5%;
+}
+.chatComp {
+    min-height:5%
+}
+
+.chatList {
+    height: 85%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.chatInputArea {
+    position:absolute;
+    bottom:4%;
+}
