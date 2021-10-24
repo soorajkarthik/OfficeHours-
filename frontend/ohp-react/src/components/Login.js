@@ -1,6 +1,7 @@
 import React from "react";
 import { BASE_URL } from "../environment"
 import Axios from "axios"
+import '../styles/Login.css'
 
 class Login extends React.Component {
 
@@ -25,7 +26,9 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className = "header">
+        <h1> Login Screen </h1>         
+        <div className= "first" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
         <input
           type="text"
           id="username"
@@ -40,9 +43,11 @@ class Login extends React.Component {
         <button onClick={this.login}>
           Login
         </button>
+        
         <p onClick={this.toRegistration}>
-          No account? Sign Up Here.
+            No account? Sign Up Here.
         </p>
+        </div>
       </div>
     );
   }

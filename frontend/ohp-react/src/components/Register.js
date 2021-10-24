@@ -64,7 +64,9 @@ class Register extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className= "header"> 
+      <div className= "Register" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
+        
         <input
           type="text"
           id="first_name"
@@ -97,10 +99,13 @@ class Register extends React.Component {
         <button onClick={this.register}>
           Register
         </button>
+        
         <p onClick={this.toLogin}>
           Have an account? Login Here.
         </p>
+        </div>
       </div>
+
     );
   }
 }
