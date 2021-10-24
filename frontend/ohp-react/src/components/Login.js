@@ -20,7 +20,7 @@ class Login extends React.Component {
   }
 
   toRegistration() {
-    window.location.replace("/registration")
+    window.location.replace("/register")
   }
 
   render() {
@@ -40,7 +40,7 @@ class Login extends React.Component {
         <button onClick={this.login}>
           Login
         </button>
-        <p>
+        <p onClick={this.toRegistration}>
           No account? Sign Up Here.
         </p>
       </div>
