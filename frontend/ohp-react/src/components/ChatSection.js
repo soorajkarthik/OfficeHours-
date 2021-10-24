@@ -1,7 +1,7 @@
 import React from 'react';
 import ChatBox from './ChatBox';
 import '../styles/ChatSection.css'
-import { ChatInput, ChatGroup, ChatList, ChatComposers, ChatInputTextArea, Chat } from '@andyet/simplewebrtc';
+import { ChatInput, ChatList, ChatComposers, ChatInputTextArea } from '@andyet/simplewebrtc';
 
 class ChatSection extends React.Component {
     render() {
