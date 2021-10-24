@@ -1,8 +1,9 @@
 import React from "react";
+import '../styles/404.css'
 
 class NotFound extends React.Component {
     render() {
-        return <h1>lol rekt</h1>
+        return null;
     }
 }
 
