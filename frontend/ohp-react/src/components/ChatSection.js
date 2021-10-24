@@ -6,7 +6,7 @@ import { ChatInput, ChatList, ChatComposers, ChatInputTextArea } from '@andyet/s
 class ChatSection extends React.Component {
     render() {
         const {roomAddress} = this.props;
-        return (<div class="chatDiv">
+        return (<div className="chatDiv">
                     <div className="chatList">
                         <ChatList
                             room={roomAddress}
@@ -20,7 +20,7 @@ class ChatSection extends React.Component {
                         room={roomAddress}
                         placeholder="Chat"
                         render={chatProps => {
-                            return (<div class="chatInputArea">
+                            return (<div className="chatInputArea">
                                 <ChatInputTextArea {...chatProps} />
                                 <button onClick={chatProps.sendMessage}>
                                     <span>Send</span>
