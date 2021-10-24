@@ -18,7 +18,10 @@ function App() {
             <NotFound/>
           </Route>
           <Route path = "/home">
-            <Home/>
+            <Home 
+              studentClasses={[["34534354", "CS 2110"], ["56354636", "CS 3600"], ["3543764", "CS 3511"]]}
+              mentorClasses={[["9238763", "CS 1315"]]}
+            />
           </Route>
           <Route path = "/register">
             <Register/>
